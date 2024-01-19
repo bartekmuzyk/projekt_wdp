@@ -35,7 +35,10 @@ def _load_sprites_from_path(path, load_to):
             _load_sprites_from_path(full_path, load_to[filename])
 
 
-def load(directory: str) -> dict[str, Sprite | dict[str, Sprite]]:
+SpritesCollection = dict[str, Sprite | dict[str, Sprite]]
+
+
+def load(directory: str) -> SpritesCollection:
     memory = {}
     _load_sprites_from_path(directory, memory)
 

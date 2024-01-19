@@ -2,7 +2,8 @@ import sys
 
 import pygame
 
-from board import Board
+from scene import SceneController
+import scenes
 from sprites import load as load_sprites
 
 pygame.init()
@@ -11,7 +12,9 @@ screen = pygame.display.set_mode((width, height))
 
 sprites = load_sprites("assets")
 
-board = Board(sprites["plansza"], screen)
+first_scene = scenes.GameplayScene
+scene_controller = SceneController(screen, sprites, first_scene)
+
 
 clock = pygame.time.Clock()
 while True:
@@ -20,11 +23,9 @@ while True:
             pygame.quit()
             sys.exit()
 
-    keys = pygame.key.get_pressed()
-
     screen.fill((0, 0, 0))
 
-    board.render()
+    scene_controller.render()
 
     pygame.display.flip()
     clock.tick(60)
