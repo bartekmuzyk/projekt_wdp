@@ -2,12 +2,19 @@ import sys
 
 import pygame
 
-from sprites import Sprites
+from sprites import load as load_sprites
 
 pygame.init()
-screen = pygame.display.set_mode((1024, 720))
+width, height = 1280, 720
+screen = pygame.display.set_mode((width, height))
 
-sprites = Sprites(path_file_name="sprites.json")
+sprites = load_sprites("assets")
+
+board_scale = 3
+board_width, board_height = sprites["plansza"].rect.w, sprites["plansza"].rect.h
+sprites["plansza"].scale(board_width * board_scale, board_height * board_scale)
+
+board_x, board_y = 0, 0
 
 while True:
     for event in pygame.event.get():
@@ -18,6 +25,8 @@ while True:
     keys = pygame.key.get_pressed()
 
     screen.fill((0, 0, 0))
-    screen.blit(*sprites.get_blit("board"))
+    screen.blit(sprites["plansza"].surface)
+    board_x += 1
+    board_y += 1
 
     pygame.display.flip()

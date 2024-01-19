@@ -1,30 +1,42 @@
-import json
+import os
 
 import pygame
 
 
-class Sprites:
-    _sprites = {}
+class Sprite:
+    surface: pygame.Surface
 
-    def __init__(self, path_file_name: str):
-        with open(path_file_name, "r") as path_file:
-            paths = json.load(path_file)
+    def __init__(self, surface):
+        self.surface = surface
 
-        for name, meta in paths.items():
-            sprite = pygame.image.load(meta["path"])
-            sprite.convert()
+    def scale(self, width, height):
+        self.surface = pygame.transform.scale(self.surface, (width, height))
 
-            sprite_rect = sprite.get_rect()
+    @property
+    def blit(self) -> (pygame.Surface, pygame.Rect):
+        return self.surface, self.rect
 
-            if "position" in meta:
-                sprite_rect.x, sprite_rect.y = meta["position"]
+    @property
+    def rect(self) -> pygame.Rect:
+        return self.surface.get_rect()
 
-            self._sprites[name] = sprite
 
-    def get_sprite(self, name: str) -> pygame.Surface | pygame.SurfaceType:
-        return self._sprites[name]
+def _load_sprites_from_path(path, load_to):
+    for filename in os.listdir(path):
+        full_path = os.path.join(path, filename)
 
-    def get_blit(self, name: str) -> (pygame.Surface | pygame.SurfaceType, pygame.Rect):
-        sprite = self.get_sprite(name)
+        if ".png" in filename:
+            surface = pygame.image.load(full_path)
+            surface.convert()
 
-        return sprite, sprite.get_rect()
+            load_to[filename.replace(".png", "")] = Sprite(surface)
+        else:
+            load_to[filename] = {}
+            _load_sprites_from_path(full_path, load_to[filename])
+
+
+def load(directory: str) -> dict[str, Sprite | dict[str, Sprite]]:
+    memory = {}
+    _load_sprites_from_path(directory, memory)
+
+    return memory
