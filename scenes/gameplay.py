@@ -22,31 +22,42 @@ class GameplayScene(Scene):
         keys = pygame.key.get_pressed()
         board_move, player_move = [0, 0], [0, 0]
 
-        if keys[pygame.K_w]:
-            board_move[1] -= 1
-        if keys[pygame.K_s]:
-            board_move[1] += 1
         if keys[pygame.K_a]:
             board_move[0] -= 1
+            self.player.direction = "L"
         if keys[pygame.K_d]:
             board_move[0] += 1
+            self.player.direction = "R"
+        if keys[pygame.K_w]:
+            board_move[1] -= 1
+            self.player.direction = "U"
+        if keys[pygame.K_s]:
+            board_move[1] += 1
+            self.player.direction = "D"
 
-        if board_move[0] != 0 and board_move[1] != 0:
-            board_move = [board_move[0] * 0.75, board_move[1] * 0.75]
+        if board_move[0] != 0 or board_move[1] != 0:
+            if board_move[0] != 0 and board_move[1] != 0:
+                board_move = [board_move[0] * 0.75, board_move[1] * 0.75]
 
-        if self.board.rect.x == 0:
-            if board_move[0] < 0 or self.player.rect.centerx < self.screen_center[0]:
-                player_move[0], board_move[0] = -board_move[0], 0
-        elif self.board.rect.x == self.board.max_pos[0]:
-            if board_move[0] > 0 or self.player.rect.centerx > self.screen_center[0]:
-                player_move[0], board_move[0] = -board_move[0], 0
+            self.player.animate()
+        else:
+            self.player.reset_animation()
 
-        if self.board.rect.y == 0:
-            if board_move[1] < 0 or self.player.rect.centery < self.screen_center[1]:
-                player_move[1], board_move[1] = -board_move[1], 0
-        elif self.board.rect.y == self.board.max_pos[1]:
-            if board_move[1] > 0 or self.player.rect.centery > self.screen_center[1]:
-                player_move[1], board_move[1] = -board_move[1], 0
+        self.player.sprite = self.sprites["kot"][f"{self.player.direction}{self.player.animation_frame}"]
+
+        if (
+            self.board.rect.x == 0 and (board_move[0] < 0 or self.player.rect.centerx < self.screen_center[0])
+        ) or (
+            self.board.rect.x == self.board.max_pos[0] and (board_move[0] > 0 or self.player.rect.centerx > self.screen_center[0])
+        ):
+            player_move[0], board_move[0] = board_move[0], 0
+
+        if (
+            self.board.rect.y == 0 and (board_move[1] < 0 or self.player.rect.centery < self.screen_center[1])
+        ) or (
+            self.board.rect.y == self.board.max_pos[1] and (board_move[1] > 0 or self.player.rect.centery > self.screen_center[1])
+        ):
+            player_move[1], board_move[1] = board_move[1], 0
 
         self.board.move(*board_move)
         self.player.move(*player_move)
