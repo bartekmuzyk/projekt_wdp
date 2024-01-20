@@ -21,6 +21,7 @@ class Sprite:
 
 def _load_sprites_from_path(path, load_to):
     meta_file_path = os.path.join(path, "meta.json")
+    meta: dict | None = None
     if os.path.isfile(meta_file_path):
         with open(meta_file_path, "r") as meta_file:
             meta = json.load(meta_file)
