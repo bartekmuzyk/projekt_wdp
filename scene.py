@@ -2,13 +2,13 @@ from typing import Type
 
 import pygame
 
-from sprites import SpritesCollection
+from assetsloader import AssetsCollection
 
 
 class Scene:
-    def __init__(self, screen: pygame.Surface, sprites: SpritesCollection):
+    def __init__(self, screen: pygame.Surface, assets: AssetsCollection):
         self.screen = screen
-        self.sprites = sprites
+        self.assets = assets
 
     def start(self):
         pass
@@ -20,13 +20,13 @@ class Scene:
 class SceneController:
     current_scene: Scene
 
-    def __init__(self, screen: pygame.Surface, sprites: SpritesCollection, first_scene: Type[Scene]):
+    def __init__(self, screen: pygame.Surface, assets: AssetsCollection, first_scene: Type[Scene]):
         self._screen = screen
-        self._sprites = sprites
+        self._assets = assets
         self.switch(first_scene)
 
     def switch(self, scene: Type[Scene]):
-        self.current_scene = scene(self._screen, self._sprites)
+        self.current_scene = scene(self._screen, self._assets)
         self.current_scene.start()
 
     def render(self):

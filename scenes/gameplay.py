@@ -6,15 +6,14 @@ from scene import Scene, SceneController
 
 
 class GameplayScene(Scene):
-    board_bg: Board
-    board_fg: Board
+    board: Board
     player: Player
     screen_center: (int, int)
 
     def start(self):
-        self.board_bg = Board(self.sprites["plansza_bg"], self.screen)
-        self.board_fg = Board(self.sprites["plansza_fg"], self.screen)
-        self.player = Player(self.sprites["kot"]["D0"], self.screen)
+        self.board = Board(self.assets["plansza_bg"], self.screen)
+        self.board.fg, self.board.hitbox = self.assets["plansza_fg"], pygame.mask.from_surface(self.assets["plansza_kolizje"].surface)
+        self.player = Player(self.assets["kot"]["D0"], self.screen)
         self.player.reset_position()
 
         screen_rect = self.screen.get_rect()
@@ -45,26 +44,26 @@ class GameplayScene(Scene):
         else:
             self.player.reset_animation()
 
-        self.player.sprite = self.sprites["kot"][f"{self.player.direction}{self.player.animation_frame}"]
+        self.player.image = self.assets["kot"][f"{self.player.direction}{self.player.animation_frame}"]
 
         if (
-                self.board_bg.rect.x == 0 and (board_move[0] < 0 or self.player.rect.centerx < self.screen_center[0])
+                self.board.rect.x == 0 and (board_move[0] < 0 or self.player.rect.centerx < self.screen_center[0])
         ) or (
-                self.board_bg.rect.x == self.board_bg.max_pos[0] and (board_move[0] > 0 or self.player.rect.centerx > self.screen_center[0])
+                self.board.rect.x == self.board.max_pos[0] and (board_move[0] > 0 or self.player.rect.centerx > self.screen_center[0])
         ):
             player_move[0], board_move[0] = board_move[0], 0
 
         if (
-                self.board_bg.rect.y == 0 and (board_move[1] < 0 or self.player.rect.centery < self.screen_center[1])
+                self.board.rect.y == 0 and (board_move[1] < 0 or self.player.rect.centery < self.screen_center[1])
         ) or (
-                self.board_bg.rect.y == self.board_bg.max_pos[1] and (board_move[1] > 0 or self.player.rect.centery > self.screen_center[1])
+                self.board.rect.y == self.board.max_pos[1] and (board_move[1] > 0 or self.player.rect.centery > self.screen_center[1])
         ):
             player_move[1], board_move[1] = board_move[1], 0
 
-        self.board_bg.move(*board_move)
-        self.board_fg.move(*board_move)
+        self.board.move(*board_move)
         self.player.move(*player_move)
 
-        self.board_bg.render()
+        print(self.board.collides_with_hitbox(self.player))
+
+        self.board.render()
         self.player.render()
-        self.board_fg.render()

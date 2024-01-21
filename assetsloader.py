@@ -4,7 +4,7 @@ import json
 import pygame
 
 
-class Sprite:
+class Asset:
     surface: pygame.Surface
 
     def __init__(self, surface):
@@ -19,7 +19,7 @@ class Sprite:
         return self.surface.get_rect()
 
 
-def _load_sprites_from_path(path, load_to):
+def _load_assets_from_path(path, load_to):
     meta_file_path = os.path.join(path, "meta.json")
     meta: dict | None = None
     if os.path.isfile(meta_file_path):
@@ -33,25 +33,23 @@ def _load_sprites_from_path(path, load_to):
         full_path = os.path.join(path, filename)
 
         if ".png" in filename:
-            surface = pygame.image.load(full_path)
+            surface = pygame.image.load(full_path).convert_alpha()
             rect = surface.get_rect()
 
             if meta is not None and "scale" in meta:
                 surface = pygame.transform.scale(surface, (rect.width * meta["scale"], rect.height * meta["scale"]))
 
-            surface.convert()
-
-            load_to[filename.replace(".png", "")] = Sprite(surface)
+            load_to[filename.replace(".png", "")] = Asset(surface)
         else:
             load_to[filename] = {}
-            _load_sprites_from_path(full_path, load_to[filename])
+            _load_assets_from_path(full_path, load_to[filename])
 
 
-SpritesCollection = dict[str, Sprite | dict[str, Sprite]]
+AssetsCollection = dict[str, Asset | dict[str, Asset]]
 
 
-def load(directory: str) -> SpritesCollection:
+def load(directory: str) -> AssetsCollection:
     memory = {}
-    _load_sprites_from_path(directory, memory)
+    _load_assets_from_path(directory, memory)
 
     return memory

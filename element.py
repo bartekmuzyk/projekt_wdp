@@ -1,12 +1,12 @@
 import pygame
 
-from sprites import Sprite
+from assetsloader import Asset
 
 
 class Element:
-    def __init__(self, sprite: Sprite, screen: pygame.Surface):
-        self.sprite = sprite
-        self.rect = self.sprite.rect
+    def __init__(self, image: Asset, screen: pygame.Surface):
+        self.image = image
+        self.rect = self.image.rect
         self.screen = screen
         self.setup()
 
@@ -14,4 +14,4 @@ class Element:
         pass
 
     def render(self):
-        self.screen.blit(self.sprite.surface, self.rect)
+        self.screen.blit(self.image.surface, self.rect)

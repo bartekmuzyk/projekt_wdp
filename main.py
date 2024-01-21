@@ -4,16 +4,16 @@ import pygame
 
 from scene import SceneController
 import scenes
-from sprites import load as load_sprites
+import assetsloader
 
 pygame.init()
 width, height = 1280, 720
 screen = pygame.display.set_mode((width, height))
 
-sprites = load_sprites("assets")
+assets = assetsloader.load_assets("assets")
 
 first_scene = scenes.GameplayScene
-scene_controller = SceneController(screen, sprites, first_scene)
+scene_controller = SceneController(screen, assets, first_scene)
 
 
 clock = pygame.time.Clock()
