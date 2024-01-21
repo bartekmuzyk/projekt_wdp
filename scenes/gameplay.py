@@ -1,23 +1,23 @@
-import pygame.key
+import pygame
 
-from elements import Board
-from elements.player import Player
+from sprites import BoardBackground
+from sprites.player import Player
 from scene import Scene, SceneController
 
 
 class GameplayScene(Scene):
-    board_bg: Board
+    board_bg: BoardBackground
     player: Player
     screen_center: (int, int)
 
     def start(self):
-        self.board_bg = Board(self.assets["plansza_bg"], self.screen)
+        screen_rect = self.screen.get_rect()
+        self.board_bg = BoardBackground(self.assets["plansza_bg"], screen_rect)
         self.sprites.add(self.board_bg)
-        self.player = Player(self.assets["kot"]["D0"], self.screen)
-        self.player.reset_position()
+        self.player = Player(self.assets["kot"]["D0"], screen_rect)
+        self.player.rect.center = screen_rect.w // 2, screen_rect.h // 2
         self.sprites.add(self.player)
 
-        screen_rect = self.screen.get_rect()
         self.screen_center = (screen_rect.w // 2, screen_rect.h // 2)
 
     def update(self, controller: 'SceneController'):
@@ -40,7 +40,6 @@ class GameplayScene(Scene):
         if board_move[0] != 0 or board_move[1] != 0:
             if board_move[0] != 0 and board_move[1] != 0:
                 board_move = [board_move[0] * 0.75, board_move[1] * 0.75]
-
             self.player.animate()
         else:
             self.player.reset_animation()

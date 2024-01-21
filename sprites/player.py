@@ -1,38 +1,36 @@
-from typing import Literal, Generator
+from typing import Generator, Literal
 
-from element import Element
 import globalsettings
-import calc
+from calc import *
+from sprite import Sprite
 
 
-class Player(Element):
+class Player(Sprite):
     max_pos: (int, int)
     animation_counter: int
     animation_frame: int
     animation_frames: Generator[int, None, None]
-    direction: Literal["D", "R", "L", "U"]
+    direction: Literal["U", "D", "L", "R"]
 
-    def setup(self):
-        screen_rect = self.screen.get_rect()
+    def setup(self, screen_rect: pygame.Rect):
         self.max_pos = (screen_rect.w - self.rect.w, screen_rect.h - self.rect.h)
         self.animation_counter = 0
         self.animation_frame = 0
-        self.animation_frames = calc.infinite_sequence([0, 1, 0, 2])
+        self.animation_frames = infinite_sequence([0, 1, 0, 2])
         self.direction = "D"
 
+    def update(self):
+        self.pos.apply_to_rect(self.rect)
+
     def move(self, x: int, y: int):
-        self.rect.x = calc.clamp(
-            self.rect.x + (x * globalsettings.PLAYER_MOVE_SPEED),
+        self.pos.x = clamp(
+            self.pos.x + (x * globalsettings.PLAYER_MOVE_SPEED),
             0, self.max_pos[0]
         )
-        self.rect.y = calc.clamp(
-            self.rect.y + (y * globalsettings.PLAYER_MOVE_SPEED),
+        self.pos.y = clamp(
+            self.pos.y + (y * globalsettings.PLAYER_MOVE_SPEED),
             0, self.max_pos[1]
         )
-
-    def reset_position(self):
-        screen_rect = self.screen.get_rect()
-        self.rect.center = screen_rect.w // 2, screen_rect.h // 2
 
     def animate(self):
         if self.animation_counter == 0:

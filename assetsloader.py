@@ -4,21 +4,6 @@ import json
 import pygame
 
 
-class Asset:
-    surface: pygame.Surface
-
-    def __init__(self, surface):
-        self.surface = surface
-
-    @property
-    def blit(self) -> (pygame.Surface, pygame.Rect):
-        return self.surface, self.rect
-
-    @property
-    def rect(self) -> pygame.Rect:
-        return self.surface.get_rect()
-
-
 def _load_assets_from_path(path, load_to):
     meta_file_path = os.path.join(path, "meta.json")
     meta: dict | None = None
@@ -39,13 +24,13 @@ def _load_assets_from_path(path, load_to):
             if meta is not None and "scale" in meta:
                 surface = pygame.transform.scale(surface, (rect.width * meta["scale"], rect.height * meta["scale"]))
 
-            load_to[filename.replace(".png", "")] = Asset(surface)
+            load_to[filename.replace(".png", "")] = surface
         else:
             load_to[filename] = {}
             _load_assets_from_path(full_path, load_to[filename])
 
 
-AssetsCollection = dict[str, Asset | dict[str, Asset]]
+AssetsCollection = dict[str, pygame.Surface | dict[str, pygame.Surface]]
 
 
 def load(directory: str) -> AssetsCollection:
