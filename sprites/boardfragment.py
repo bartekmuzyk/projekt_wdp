@@ -3,7 +3,7 @@ from calc import *
 from sprite import Sprite
 
 
-class BoardBackground(Sprite):
+class BoardFragment(Sprite):
     max_pos: (int, int)
 
     def setup(self, screen_rect: pygame.Rect):
@@ -18,6 +18,3 @@ class BoardBackground(Sprite):
             self.pos.y - (y * globalsettings.PLAYER_MOVE_SPEED),
             self.max_pos[1], 0
         )
-
-    def update(self):
-        self.pos.apply_to_rect(self.rect)

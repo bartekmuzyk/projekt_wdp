@@ -19,8 +19,8 @@ class Player(Sprite):
         self.animation_frames = infinite_sequence([0, 1, 0, 2])
         self.direction = "D"
 
-    def update(self):
-        self.pos.apply_to_rect(self.rect)
+        self.rect.center = (screen_rect.w // 2, screen_rect.h // 2)
+        self.refresh_coords()
 
     def move(self, x: int, y: int):
         self.pos.x = clamp(

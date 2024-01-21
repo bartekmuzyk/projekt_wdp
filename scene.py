@@ -8,6 +8,7 @@ from assetsloader import AssetsCollection
 class Scene:
     def __init__(self, screen: pygame.Surface, assets: AssetsCollection):
         self.screen = screen
+        self.screen_rect = screen.get_rect()
         self.assets = assets
         self.sprites = pygame.sprite.Group()
 
