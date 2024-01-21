@@ -16,8 +16,6 @@ class GameplayScene(Scene):
         self.player = Player(self.assets["kot"]["D0"], self.screen_rect, z_index=2)
         self.sprites.append(self.player)
 
-        self.board.move(1360, 660)
-
     def update(self, controller: 'SceneController'):
         keys = pygame.key.get_pressed()
         board_move, self.player.direction = calc.movement(keys)
