@@ -1,30 +1,22 @@
 import pygame
 
 import calc
-from sprites import BoardFragment, Player
 from scene import Scene, SceneController
+from sprites import Player, CompleteBoard
 
 
 class GameplayScene(Scene):
-    board_bg: BoardFragment
-    board_fg: BoardFragment
+    board: CompleteBoard
     player: Player
 
     def start(self):
-        screen_rect = self.screen.get_rect()
-        self.board_bg = BoardFragment(self.assets["plansza_bg"], screen_rect)
-        self.sprites.add(self.board_bg)
+        self.board = CompleteBoard((self.assets["plansza_bg"], 1), (self.assets["plansza_fg"], 3), self.screen_rect)
+        self.sprites.append(self.board)
 
-        self.player = Player(self.assets["kot"]["D0"], screen_rect)
-        self.sprites.add(self.player)
+        self.player = Player(self.assets["kot"]["D0"], self.screen_rect, z_index=2)
+        self.sprites.append(self.player)
 
-        self.board_fg = BoardFragment(self.assets["plansza_fg"], screen_rect)
-        self.sprites.add(self.board_fg)
-        self.move_board((1360, 660))
-
-    def move_board(self, move: list[int] | tuple[int, int]):
-        self.board_bg.move(*move)
-        self.board_fg.move(*move)
+        self.board.move(1360, 660)
 
     def update(self, controller: 'SceneController'):
         keys = pygame.key.get_pressed()
@@ -38,6 +30,6 @@ class GameplayScene(Scene):
 
         self.player.image = self.assets["kot"][f"{self.player.direction}{self.player.animation_frame}"]
 
-        calc.redirect_board_movement_to_player(board_move, player_move, self.board_bg.rect, self.player.rect, self.screen_rect, self.board_bg.max_pos)
-        self.move_board(board_move)
+        calc.redirect_board_movement_to_player(board_move, player_move, self.board.bg.rect, self.player.rect, self.screen_rect, self.board.bg.max_pos)
+        self.board.move(*board_move)
         self.player.move(*player_move)

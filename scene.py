@@ -3,14 +3,17 @@ from typing import Type
 import pygame
 
 from assetsloader import AssetsCollection
+from sprite import Sprite, MultiSprite
 
 
 class Scene:
+    sprites: list[Sprite | MultiSprite]
+
     def __init__(self, screen: pygame.Surface, assets: AssetsCollection):
         self.screen = screen
         self.screen_rect = screen.get_rect()
         self.assets = assets
-        self.sprites = pygame.sprite.Group()
+        self.sprites = []
 
     def start(self):
         pass
@@ -19,8 +22,21 @@ class Scene:
         return NotImplemented
 
     def render(self):
-        self.sprites.update()
-        self.sprites.draw(self.screen)
+        sprites = []
+
+        for sprite in self.sprites:
+            if isinstance(sprite, MultiSprite):
+                for sprite2 in sprite.contained_sprites.values():
+                    sprites.append(sprite2)
+                continue
+
+            sprites.append(sprite)
+
+        sprites = sorted(sprites, key=lambda v: v.z_index)
+
+        for sprite in sprites:
+            sprite.update()
+            self.screen.blit(sprite.image, sprite.rect)
 
 
 class SceneController:

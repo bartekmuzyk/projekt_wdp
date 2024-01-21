@@ -9,7 +9,7 @@ class BoardFragment(Sprite):
     def setup(self, screen_rect: pygame.Rect):
         self.max_pos = (-self.rect.w + screen_rect.w, -self.rect.h + screen_rect.h)
 
-    def move(self, x: int, y: int):
+    def move(self, x: float, y: float):
         self.pos.x = clamp(
             self.pos.x - (x * globalsettings.PLAYER_MOVE_SPEED),
             self.max_pos[0], 0
