@@ -10,7 +10,7 @@ pygame.init()
 width, height = 1280, 720
 screen = pygame.display.set_mode((width, height))
 
-assets = assetsloader.load_assets("assets")
+assets = assetsloader.load("assets")
 
 first_scene = scenes.GameplayScene
 scene_controller = SceneController(screen, assets, first_scene)
