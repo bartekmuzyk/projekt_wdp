@@ -13,6 +13,3 @@ class Element(pygame.sprite.Sprite):
 
     def setup(self):
         pass
-
-    def render(self):
-        self.screen.blit(self.image.surface, self.rect)

@@ -9,12 +9,17 @@ class Scene:
     def __init__(self, screen: pygame.Surface, assets: AssetsCollection):
         self.screen = screen
         self.assets = assets
+        self.sprites = pygame.sprite.Group()
 
     def start(self):
         pass
 
-    def render(self, controller: 'SceneController'):
+    def update(self, controller: 'SceneController'):
         return NotImplemented
+
+    def render(self):
+        self.sprites.update()
+        self.sprites.draw(self.screen)
 
 
 class SceneController:
@@ -30,4 +35,5 @@ class SceneController:
         self.current_scene.start()
 
     def render(self):
-        self.current_scene.render(self)
+        self.current_scene.update(self)
+        self.current_scene.render()

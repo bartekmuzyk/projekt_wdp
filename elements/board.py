@@ -13,7 +13,7 @@ class Board(Element):
 
     def setup(self):
         screen_rect = self.screen.get_rect()
-        self.max_pos = (-self.image.rect.w + screen_rect.w, -self.image.rect.h + screen_rect.h)
+        self.max_pos = (-self.rect.w + screen_rect.w, -self.rect.h + screen_rect.h)
 
     def move(self, x: int, y: int):
         self.rect.x = calc.clamp(
@@ -24,10 +24,3 @@ class Board(Element):
             self.rect.y - (y * globalsettings.PLAYER_MOVE_SPEED),
             self.max_pos[1], 0
         )
-
-    def render(self):
-        super().render()
-        self.screen.blit(self.fg.surface, self.rect)
-
-    def collides_with_hitbox(self, element: Element):
-        print(self.hitbox.get_rect())
