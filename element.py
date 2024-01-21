@@ -3,10 +3,11 @@ import pygame
 from assetsloader import Asset
 
 
-class Element:
+class Element(pygame.sprite.Sprite):
     def __init__(self, image: Asset, screen: pygame.Surface):
-        self.image = image
-        self.rect = self.image.rect
+        super().__init__()
+        self.image = image.surface
+        self.rect = image.rect
         self.screen = screen
         self.setup()
 
