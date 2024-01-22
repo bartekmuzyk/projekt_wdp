@@ -7,6 +7,7 @@ from sprite import Sprite
 
 class Player(Sprite):
     max_pos: (int, int)
+    prev_pos: PreciseCoords
     animation_counter: int
     animation_frame: int
     animation_frames: Generator[int, None, None]

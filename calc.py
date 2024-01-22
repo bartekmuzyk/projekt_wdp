@@ -22,5 +22,9 @@ class PreciseCoords:
     def from_rect(cls, rect: pygame.Rect):
         return cls(rect.x, rect.y)
 
+    @classmethod
+    def clone(cls, pos: 'PreciseCoords'):
+        return cls(pos.x, pos.y)
+
     def apply_to_rect(self, rect: pygame.Rect):
         rect.x, rect.y = round(self.x), round(self.y)

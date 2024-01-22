@@ -4,10 +4,12 @@ from calc import *
 class Sprite(pygame.sprite.Sprite):
     pos: PreciseCoords
 
-    def __init__(self, image: pygame.Surface, screen_rect: pygame.Rect, *, z_index: int = 0):
+    def __init__(self, image: pygame.Surface, screen_rect: pygame.Rect, *, z_index: int = 0, mask: bool = False):
         super().__init__()
         self.image = image
         self.rect = self.image.get_rect()
+        if mask:
+            self.mask = pygame.mask.from_surface(self.image)
         self.refresh_coords()
         self.z_index = z_index
         self.setup(screen_rect)
