@@ -1,7 +1,9 @@
 import pygame
 
 from sprite import MultiSprite
-from sprites import BoardFragment
+from sprites.boardfragment import BoardFragment
+from sprites.playerwithcollisions import PlayerWithCollisions
+from sprites.playerhitpoint import PlayerHitpoint
 
 
 # noinspection PyUnresolvedReferences
@@ -22,10 +24,10 @@ class CompleteBoard(MultiSprite):
     def bg(self) -> BoardFragment:
         return self.contained_sprites["bg"]
 
-    def player_collides_with_hitbox(self, player):
-        return len(pygame.sprite.spritecollide(
+    def player_collides_with_hitbox(self, player: PlayerWithCollisions) -> list[PlayerHitpoint]:
+        return pygame.sprite.spritecollide(
             self.contained_sprites["hitbox"],
-            pygame.sprite.Group(player.hitpoints),
+            player.hitpoints_group,
             False,
-            collided=pygame.sprite.collide_mask)
-        ) > 0
+            collided=pygame.sprite.collide_mask
+        )

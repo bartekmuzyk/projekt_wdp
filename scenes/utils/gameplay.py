@@ -43,3 +43,28 @@ def redirect_board_movement_to_player(board_move: list[int], player_move: list[i
         )
     ):
         player_move[1], board_move[1] = board_move[1], 0
+
+
+def apply_hitboxes_to_movement(board_move: list[int], player_move: list[int],
+                               board: CompleteBoard, player: PlayerWithCollisions):
+    for collision in board.player_collides_with_hitbox(player):
+        if collision.label == "u":
+            if board_move[1] < 0:
+                board_move[1] = 0
+            elif player_move[1] < 0:
+                player_move[1] = 0
+        if collision.label == "r":
+            if board_move[0] > 0:
+                board_move[0] = 0
+            elif player_move[0] > 0:
+                player_move[0] = 0
+        if collision.label == "d":
+            if board_move[1] > 0:
+                board_move[1] = 0
+            elif player_move[1] > 0:
+                player_move[1] = 0
+        if collision.label == "l":
+            if board_move[0] < 0:
+                board_move[0] = 0
+            elif player_move[0] < 0:
+                player_move[0] = 0

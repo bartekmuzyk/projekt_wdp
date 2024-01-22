@@ -1,5 +1,4 @@
 from scene import Scene, SceneController
-from sprites import CompleteBoard, PlayerWithCollisions
 from .utils.gameplay import *
 
 
@@ -16,7 +15,7 @@ class GameplayScene(Scene):
 
     def update(self, controller: 'SceneController'):
         keys = pygame.key.get_pressed()
-        board_move, self.player.direction = calculate_board_movement(keys)
+        board_move, self.player.real_sprite.direction = calculate_board_movement(keys)
         player_move = [0, 0]
 
         if board_move[0] != 0 or board_move[1] != 0:
@@ -24,19 +23,10 @@ class GameplayScene(Scene):
         else:
             self.player.real_sprite.reset_animation()
 
-        self.player.image = self.assets["kot"][f"{self.player.real_sprite.direction}{self.player.real_sprite.animation_frame}"]
+        self.player.real_sprite.image = self.assets["kot"][f"{self.player.real_sprite.direction}{self.player.real_sprite.animation_frame}"]
 
         redirect_board_movement_to_player(board_move, player_move, self.board, self.player, self.screen_rect)
+        apply_hitboxes_to_movement(board_move, player_move, self.board, self.player)
+
         self.board.move(*board_move)
         self.player.move(*player_move)
-
-        if self.board.player_collides_with_hitbox(self.player):
-            board_back_move, player_back_move = [0, 0], [0, 0]
-            if board_move[0] != 0 or player_move[0] != 0:
-                board_back_move[0], player_back_move[0] = -board_move[0], -player_move[0]
-
-            print(board_back_move, player_back_move)
-            self.board.move(*board_back_move)
-            self.player.move(*player_back_move)
-
-
