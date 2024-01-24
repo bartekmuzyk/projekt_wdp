@@ -6,7 +6,7 @@ from sprite import Sprite
 
 
 class Player(Sprite):
-    max_pos: (int, int)
+    max_pos: tuple[int, int]
     prev_pos: PreciseCoords
     animation_counter: int
     animation_frame: int
@@ -21,7 +21,7 @@ class Player(Sprite):
         self.direction = "D"
 
         self.rect.center = (screen_rect.w // 2, screen_rect.h // 2)
-        self.refresh_coords()
+        self.synchronize_precise_coords()
 
     def move(self, x: int, y: int):
         self.pos.x = clamp(

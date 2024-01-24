@@ -1,17 +1,22 @@
 from scene import Scene, SceneController
+from sprites import TrashCans
 from .utils.gameplay import *
 
 
 class GameplayScene(Scene):
     board: CompleteBoard
     player: PlayerWithCollisions
+    trashcans: TrashCans
 
     def start(self):
-        self.board = CompleteBoard(self.assets["plansza"], self.screen_rect, z_index=(1, 3))
+        self.board = CompleteBoard(self.assets["plansza"], self.screen_rect, z_index=(1, 4))
         self.sprites.append(self.board)
 
-        self.player = PlayerWithCollisions(self.assets["kot"]["D0"], self.screen_rect, z_index=2)
+        self.player = PlayerWithCollisions(self.assets["kot"]["D0"], self.screen_rect, z_index=3)
         self.sprites.append(self.player)
+
+        self.trashcans = TrashCans(self.assets["trashcan"], self.screen_rect, z_index=2)
+        self.sprites.append(self.trashcans)
 
     def update(self, controller: 'SceneController'):
         keys = pygame.key.get_pressed()
@@ -30,3 +35,4 @@ class GameplayScene(Scene):
 
         self.board.move(*board_move)
         self.player.move(*player_move)
+        self.trashcans.set_pos_all(self.board.bg.pos.x, self.board.bg.pos.y)

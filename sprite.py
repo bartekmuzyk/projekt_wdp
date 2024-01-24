@@ -10,7 +10,7 @@ class Sprite(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         if mask:
             self.mask = pygame.mask.from_surface(self.image)
-        self.refresh_coords()
+        self.synchronize_precise_coords()
         self.z_index = z_index
         self.setup(screen_rect)
 
@@ -20,7 +20,7 @@ class Sprite(pygame.sprite.Sprite):
     def update(self):
         self.pos.apply_to_rect(self.rect)
 
-    def refresh_coords(self):
+    def synchronize_precise_coords(self):
         self.pos = PreciseCoords.from_rect(self.rect)
 
 
