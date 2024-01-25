@@ -18,7 +18,6 @@ class TrashCans(MultiSprite):
 
         for i, location in enumerate(globalsettings.TRASHCAN_LOCATIONS):
             trashcan = TrashCan(trashcan_assets["standing"], screen_rect, z_index=z_index)
-            trashcan.id = i
             trashcan.offset = location
             vicinity = TrashCanVicinity(trashcan)
             self.contained_sprites[f"trashcan{i}"] = trashcan

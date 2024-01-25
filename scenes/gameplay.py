@@ -1,14 +1,14 @@
 import pygame
-
 from scene import Scene, SceneController
-from sprites import TrashCans
-from .utils.gameplay import *
+from sprites import CompleteBoard, Player, TrashCans, HUD
+from .utils import gameplay as utils
 
 
 class GameplayScene(Scene):
     board: CompleteBoard
     player: Player
     trashcans: TrashCans
+    hud: HUD
 
     def start(self):
         self.board = CompleteBoard(self.assets["plansza"], self.screen_rect, z_index=(1, 4))
@@ -20,9 +20,12 @@ class GameplayScene(Scene):
         self.trashcans = TrashCans(self.assets["trashcan"], self.screen_rect, z_index=2)
         self.sprites.append(self.trashcans)
 
+        self.hud = HUD(self.assets["ui"], self.fonts["PixCon"], self.screen_rect, z_index=5)
+        self.sprites.append(self.hud)
+
     def update(self, controller: 'SceneController'):
         keys = pygame.key.get_pressed()
-        board_move, self.player.direction = calculate_board_movement(keys)
+        board_move, self.player.direction = utils.calculate_board_movement(keys)
         player_move = [0, 0]
 
         if board_move[0] != 0 or board_move[1] != 0:
@@ -32,8 +35,8 @@ class GameplayScene(Scene):
 
         self.player.image = self.assets["kot"][f"{self.player.direction}{self.player.animation_frame}"]
 
-        redirect_board_movement_to_player(board_move, player_move, self.board, self.player, self.screen_rect)
-        apply_hitboxes_to_movement(board_move, player_move, self.board, self.player)
+        utils.redirect_board_movement_to_player(board_move, player_move, self.board, self.player, self.screen_rect)
+        utils.apply_hitboxes_to_movement(board_move, player_move, self.board, self.player)
 
         self.board.move(*board_move)
         self.player.move(*player_move)
@@ -42,6 +45,8 @@ class GameplayScene(Scene):
         trashcan_in_vicinity = self.trashcans.close_trashcan(self.player)
 
         if trashcan_in_vicinity is not None and not trashcan_in_vicinity.destroyed:
-            print(trashcan_in_vicinity.id)
+            self.hud.toggle_press_e_tip(True)
             if keys[pygame.K_e]:
                 self.trashcans.destroy_trashcan(trashcan_in_vicinity)
+        else:
+            self.hud.toggle_press_e_tip(False)

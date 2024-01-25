@@ -4,7 +4,6 @@ from sprite import Sprite
 
 
 class TrashCan(Sprite):
-    id: int
     offset: tuple[int, int]
     destroyed: bool
 
