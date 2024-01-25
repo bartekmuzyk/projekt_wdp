@@ -2,5 +2,8 @@
   "scale": 4,
   "timer.png": {
     "scale": 2
+  },
+  "button.png": {
+    "scale": 2
   }
 }

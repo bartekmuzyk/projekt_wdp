@@ -85,3 +85,13 @@ class TextSprite(MultiSprite):
     @property
     def rect(self) -> pygame.Rect:
         return self.real_text.rect
+
+
+class ColorSprite(pygame.sprite.Sprite):
+    def __init__(self, color, size: tuple[int, int], opacity=255, *, z_index: int = 0):
+        super().__init__()
+        self.image = pygame.Surface(size)
+        pygame.draw.rect(self.image, color, ((0, 0), size))
+        self.image.set_alpha(opacity)
+        self.rect = self.image.get_rect()
+        self.z_index = z_index

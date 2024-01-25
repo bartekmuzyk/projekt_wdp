@@ -6,3 +6,6 @@ from .trashcan import TrashCan
 from .trashcans import TrashCans
 from .trashcanvicinity import TrashCanVicinity
 from .hud import HUD
+from .countdown import Countdown
+from .winscreen import WinScreen
+from .button import Button

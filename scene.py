@@ -1,9 +1,10 @@
-from typing import Type, Iterable
+from typing import Iterable, Type
 
 import pygame
 
 from assetsloader import AssetsCollection
-from sprite import Sprite, MultiSprite
+from fontsloader import Font
+from sprite import Sprite, MultiSprite, ColorSprite
 
 
 def unpack_sprites(sprites: Iterable[Sprite | MultiSprite]) -> list[Sprite]:
@@ -21,14 +22,15 @@ def unpack_sprites(sprites: Iterable[Sprite | MultiSprite]) -> list[Sprite]:
 
 
 class Scene:
-    sprites: list[Sprite | MultiSprite]
-    fonts: dict[str, pygame.font.Font]
+    sprites: list[Sprite | MultiSprite | ColorSprite]
+    fonts: dict[str, Font]
 
-    def __init__(self, screen: pygame.Surface, assets: AssetsCollection, fonts: dict[str, pygame.font.Font]):
+    def __init__(self, screen: pygame.Surface, assets: AssetsCollection, fonts: dict[str, Font], context):
         self.screen = screen
         self.screen_rect = screen.get_rect()
         self.assets = assets
         self.fonts = fonts
+        self.context = context
         self.sprites = []
 
     def start(self):
@@ -49,14 +51,16 @@ class SceneController:
     current_scene: Scene
 
     def __init__(self, screen: pygame.Surface, assets: AssetsCollection, fonts: dict[str, pygame.font.Font],
-                 first_scene: Type[Scene]):
+                 first_scene: str, scene_names: dict[str, Type[Scene]]):
         self._screen = screen
         self._assets = assets
         self._fonts = fonts
+        self._scenes = scene_names
+        self.context = {}
         self.switch(first_scene)
 
-    def switch(self, scene: Type[Scene]):
-        self.current_scene = scene(self._screen, self._assets, self._fonts)
+    def switch(self, scene_name: str):
+        self.current_scene = self._scenes[scene_name](self._screen, self._assets, self._fonts, self.context)
         self.current_scene.start()
 
     def render(self):

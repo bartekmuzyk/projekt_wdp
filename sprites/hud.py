@@ -19,7 +19,7 @@ class HUD(MultiSprite):
             "trashcan_counter_label2": TextSprite("śmietniki", ui_font.small, screen_rect, z_index=z_index),
             "trashcan_counter_label3": TextSprite("0", ui_font.huge, screen_rect, z_index=z_index),
             "timer_icon": Sprite(ui_assets["timer"], screen_rect, z_index=z_index),
-            "timer_text": TextSprite("0:30", ui_font.normal, screen_rect, z_index=z_index)
+            "timer_text": TextSprite("0:00", ui_font.normal, screen_rect, z_index=z_index)
         }
         self.under = screen_rect.height + 1
 

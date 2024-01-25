@@ -8,7 +8,7 @@ class BoardFragment(Sprite):
 
     def setup(self, screen_rect: pygame.Rect):
         self.max_pos = (-self.rect.w + screen_rect.w, -self.rect.h + screen_rect.h)
-        self.rect.x, self.rect.y = -2722, -1340
+        self.rect.x, self.rect.y = globalsettings.BOARD_START_POS
         self.synchronize_precise_coords()
 
     def move(self, x: float, y: float):

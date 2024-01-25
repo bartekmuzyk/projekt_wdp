@@ -3,9 +3,9 @@ import sys
 import pygame
 
 from scene import SceneController
-import scenes
 import assetsloader
 import fontsloader
+from scenes import GameplayScene, MenuScene, ScoreScene
 
 pygame.init()
 width, height = 1280, 720
@@ -14,8 +14,13 @@ screen = pygame.display.set_mode((width, height))
 assets = assetsloader.load("assets")
 fonts = fontsloader.load("fonts")
 
-first_scene = scenes.GameplayScene
-scene_controller = SceneController(screen, assets, fonts, first_scene)
+scene_names = {
+    "Gameplay": GameplayScene,
+    "Menu": MenuScene,
+    "Score": ScoreScene
+}
+first_scene = "Menu"
+scene_controller = SceneController(screen, assets, fonts, first_scene, scene_names)
 
 
 clock = pygame.time.Clock()
