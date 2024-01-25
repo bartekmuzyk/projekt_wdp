@@ -21,8 +21,17 @@ def _load_assets_from_path(path, load_to):
             surface = pygame.image.load(full_path).convert_alpha()
             rect = surface.get_rect()
 
-            if meta is not None and "scale" in meta:
-                surface = pygame.transform.scale(surface, (rect.width * meta["scale"], rect.height * meta["scale"]))
+            if meta is not None:
+                if filename in meta and "scale" in meta[filename]:
+                    surface = pygame.transform.scale(
+                        surface,
+                        (rect.width * meta[filename]["scale"], rect.height * meta[filename]["scale"])
+                    )
+                elif "scale" in meta:
+                    surface = pygame.transform.scale(
+                        surface,
+                        (rect.width * meta["scale"], rect.height * meta["scale"])
+                    )
 
             load_to[filename.replace(".png", "")] = surface
         else:

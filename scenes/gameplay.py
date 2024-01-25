@@ -1,4 +1,6 @@
 import pygame
+
+import globalsettings
 from scene import Scene, SceneController
 from sprites import CompleteBoard, Player, TrashCans, HUD
 from .utils import gameplay as utils
@@ -9,6 +11,8 @@ class GameplayScene(Scene):
     player: Player
     trashcans: TrashCans
     hud: HUD
+    count_start_tick: int
+    elapsed_seconds: int
 
     def start(self):
         self.board = CompleteBoard(self.assets["plansza"], self.screen_rect, z_index=(1, 4))
@@ -22,6 +26,8 @@ class GameplayScene(Scene):
 
         self.hud = HUD(self.assets["ui"], self.fonts["PixCon"], self.screen_rect, z_index=5)
         self.sprites.append(self.hud)
+
+        self.count_start_tick = pygame.time.get_ticks()
 
     def update(self, controller: 'SceneController'):
         keys = pygame.key.get_pressed()
@@ -50,3 +56,8 @@ class GameplayScene(Scene):
                 self.trashcans.destroy_trashcan(trashcan_in_vicinity)
         else:
             self.hud.toggle_press_e_tip(False)
+
+        self.hud.set_destroyed_trashcans_count(self.trashcans.destroyed_trashcans_count)
+
+        remaining_seconds = globalsettings.GAMEPLAY_TIME - (pygame.time.get_ticks() - self.count_start_tick) // 1000
+        self.hud.set_remaining_seconds(remaining_seconds)

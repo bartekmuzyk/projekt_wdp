@@ -68,6 +68,10 @@ class TextSprite(MultiSprite):
 
     def update_text(self, text: str):
         self.real_text.image = self._write_text(text)
+        for direction in ("u", "r", "d", "l"):
+            outline = self.contained_sprites[f"outline_{direction}"]
+            outline.image = self._write_text(text, (0, 0, 0))
+            outline.refresh_rect_based_on_image()
         self.real_text.refresh_rect_based_on_image()
 
     @property

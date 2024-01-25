@@ -41,3 +41,7 @@ class TrashCans(MultiSprite):
 
         trashcan.destroyed = True
         trashcan.image = self.fallen_trashcan_asset
+
+    @property
+    def destroyed_trashcans_count(self) -> int:
+        return len([trashcan for trashcan in self.contained_sprites.values() if trashcan.destroyed])

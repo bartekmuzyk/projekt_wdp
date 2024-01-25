@@ -1,3 +1,6 @@
 {
-  "scale": 4
+  "scale": 4,
+  "timer.png": {
+    "scale": 2
+  }
 }
