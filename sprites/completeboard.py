@@ -2,7 +2,7 @@ import pygame
 
 from sprite import MultiSprite
 from sprites.boardfragment import BoardFragment
-from sprites.playerwithcollisions import PlayerWithCollisions
+from sprites.player import Player
 from sprites.playerhitpoint import PlayerHitpoint
 
 
@@ -24,7 +24,7 @@ class CompleteBoard(MultiSprite):
     def bg(self) -> BoardFragment:
         return self.contained_sprites["bg"]
 
-    def player_collides_with_hitbox(self, player: PlayerWithCollisions) -> list[PlayerHitpoint]:
+    def player_collides_with_hitbox(self, player: Player) -> list[PlayerHitpoint]:
         return pygame.sprite.spritecollide(
             self.contained_sprites["hitbox"],
             player.hitpoints_group,

@@ -1,6 +1,6 @@
 import pygame
 
-from sprites import PlayerWithCollisions, CompleteBoard
+from sprites import Player, CompleteBoard
 
 
 def calculate_board_movement(keys: pygame.key.ScancodeWrapper) -> tuple[list[int], str]:
@@ -22,31 +22,31 @@ def calculate_board_movement(keys: pygame.key.ScancodeWrapper) -> tuple[list[int
 
 
 def redirect_board_movement_to_player(board_move: list[int], player_move: list[int],
-                                      board: CompleteBoard, player: PlayerWithCollisions, screen_rect: pygame.Rect):
+                                      board: CompleteBoard, player: Player, screen_rect: pygame.Rect):
     if (
         board.bg.rect.x == 0 and (
-            board_move[0] < 0 or player.real_sprite.rect.centerx < screen_rect.centerx
+            board_move[0] < 0 or player.rect.centerx < screen_rect.centerx
         )
     ) or (
         board.bg.rect.x == board.bg.max_pos[0] and (
-            board_move[0] > 0 or player.real_sprite.rect.centerx > screen_rect.centerx
+            board_move[0] > 0 or player.rect.centerx > screen_rect.centerx
         )
     ):
         player_move[0], board_move[0] = board_move[0], 0
     if (
         board.bg.rect.y == 0 and (
-            board_move[1] < 0 or player.real_sprite.rect.centery < screen_rect.centery
+            board_move[1] < 0 or player.rect.centery < screen_rect.centery
         )
     ) or (
         board.bg.rect.y == board.bg.max_pos[1] and (
-            board_move[1] > 0 or player.real_sprite.rect.centery > screen_rect.centery
+            board_move[1] > 0 or player.rect.centery > screen_rect.centery
         )
     ):
         player_move[1], board_move[1] = board_move[1], 0
 
 
 def apply_hitboxes_to_movement(board_move: list[int], player_move: list[int],
-                               board: CompleteBoard, player: PlayerWithCollisions):
+                               board: CompleteBoard, player: Player):
     for collision in board.player_collides_with_hitbox(player):
         if collision.label == "u":
             if board_move[1] < 0:
