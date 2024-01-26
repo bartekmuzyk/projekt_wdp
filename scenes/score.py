@@ -83,10 +83,10 @@ class ScoreScene(Scene):
             if name:
                 while len(name) > 15:
                     name = easygui.enterbox("Imię nie może być dłuższe niż 15 znaków!", "Zapisywanie wyniku", strip=True)
-            self.scoreboard.scores[name] = self.points_earned
-            self.scoreboard.save()
-            self.save_points_btn.update_text("Zapisano wynik!")
-            self.points_saved = True
+                self.scoreboard.scores[name] = self.points_earned
+                self.scoreboard.save()
+                self.save_points_btn.update_text("Zapisano wynik!")
+                self.points_saved = True
         elif self.quit_btn.clicked:
             controller.switch("Menu")
         elif self.try_again_btn.clicked:
